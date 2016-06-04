@@ -33,7 +33,30 @@ public class MkGraphics {
      * @param y2 second y coordinate.
      */
     public static void drawLine(Graphics g, int x1, int y1, int x2, int y2) {
-        // TODO implement bresenham in all cases
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+        
+        int d = 2 * dy - dx; // d start
+        
+        int e = 2 * dy;
+        int ne = 2 * (dy - dx);
+        
+        int x = x1;
+        int y = y1;
+        
+        MkGraphics.putPixel(g, x, y);
+        
+        while (x > x2) {
+        	if(d <= 0) { // east
+        		d = d + e;
+        		x = x + 1;
+        	} else { // northeast
+        		d = d + ne;
+        		x = x + 1;
+        		y = y + 1;
+        	}
+        	MkGraphics.putPixel(g, x, y);
+        }
     }
 
     /**
