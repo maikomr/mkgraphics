@@ -46,7 +46,7 @@ public class MkGraphics {
         
         MkGraphics.putPixel(g, x, y);
         
-        while (x > x2) {
+        while (x < x2) {
         	if(d <= 0) { // east
         		d = d + e;
         		x = x + 1;
