@@ -36,30 +36,65 @@ public class MkGraphics {
         int dx = x2 - x1;
         int dy = y2 - y1;
         
-        int d = 2 * dy - dx; // d start
-        
-        int e = 2 * dy;
-        int ne = 2 * (dy - dx);
-        
-        int x = x1;
-        int y = y1;
-        
-        MkGraphics.putPixel(g, x, y);
-        
-        while (x < x2) {
-        	if(d <= 0) { // east
-        		d = d + e;
-        		x = x + 1;
-        	} else { // northeast
-        		d = d + ne;
-        		x = x + 1;
-        		y = y + 1;
+        if(dx > 0) {
+        	if(dy > 0) {
+		        if(dx > dy) {
+		        	drawLineCase1(g, x1, y1, x2, dx, dy);
+		        } else {	        
+			        drawLineCase2(g, x1, y1, y2, dx, dy);
+		        }
         	}
-        	MkGraphics.putPixel(g, x, y);
         }
     }
 
-    /**
+	private static void drawLineCase1(Graphics g, int x1, int y1, int x2, int dx, int dy) {
+		int d = 2*dy - dx; // d start
+		
+		int e = 2 * dy;
+		int ne = 2 * (dy - dx);
+		
+		int x = x1;
+		int y = y1;        
+		MkGraphics.putPixel(g, x, y);
+		
+		while (x < x2) {
+			if(d <= 0) { // east
+				d = d + e;
+				x = x + 1;
+			} else { // northeast
+				d = d + ne;
+				x = x + 1;
+				y = y + 1;
+			}
+			MkGraphics.putPixel(g, x, y);
+		}
+	}
+
+    private static void drawLineCase2(Graphics g, int x1, int y1, int y2, int dx, int dy) {
+    	int d = dy - dx*2; // start
+    	
+    	int n = 2*(-dx);
+    	int ne = 2*(dy - dx);
+    	
+    	int x = x1;
+    	int y = y1;    	
+    	MkGraphics.putPixel(g, x, y);
+    	
+    	while(y < y2) {
+    		if(d <= 0) { // northeast
+    			d = d + ne;
+    			x = x + 1;
+    			y = y + 1;
+    			
+    		} else { // north
+    			d = d + n;
+    			y = y + 1;
+    		}
+    		MkGraphics.putPixel(g, x, y);
+    	}    	
+	}
+
+	/**
      * Draws the outline of the specified rectangle. The left and right edges of
      * the rectangle are at x and x + width. The top and bottom edges are at y
      * and y + height.
