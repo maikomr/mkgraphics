@@ -44,17 +44,26 @@ public class MkGraphics {
 			        drawLineCase2(g, x1, y1, y2, dx, dy);
 		        }
         	}
+        } else if(dx < 0) {
+        	if(dy > 0) {
+        		if(dx < dy) {
+        			drawLineCase3(g, x1, y1, y2, dx, dy);
+        		} else {
+        			// TODO draw line case 4
+        		}
+        	}
         }
     }
 
 	private static void drawLineCase1(Graphics g, int x1, int y1, int x2, int dx, int dy) {
 		int d = 2*dy - dx; // d start
 		
-		int e = 2 * dy;
-		int ne = 2 * (dy - dx);
+		int e = 2*dy;
+		int ne = 2*(dy - dx);
 		
 		int x = x1;
 		int y = y1;        
+		System.out.println(String.format("(%d,%d)", x,y));
 		MkGraphics.putPixel(g, x, y);
 		
 		while (x < x2) {
@@ -66,18 +75,20 @@ public class MkGraphics {
 				x = x + 1;
 				y = y + 1;
 			}
+			System.out.println(String.format("(%d,%d)", x,y));
 			MkGraphics.putPixel(g, x, y);
 		}
 	}
 
     private static void drawLineCase2(Graphics g, int x1, int y1, int y2, int dx, int dy) {
-    	int d = dy - dx*2; // start
+    	int d = dy -2*dx; // start
     	
-    	int n = 2*(-dx);
+    	int n = -2*dx;
     	int ne = 2*(dy - dx);
     	
     	int x = x1;
-    	int y = y1;    	
+    	int y = y1;
+    	System.out.println(String.format("(%d,%d)", x,y));
     	MkGraphics.putPixel(g, x, y);
     	
     	while(y < y2) {
@@ -85,14 +96,39 @@ public class MkGraphics {
     			d = d + ne;
     			x = x + 1;
     			y = y + 1;
-    			
     		} else { // north
     			d = d + n;
     			y = y + 1;
     		}
+    		System.out.println(String.format("(%d,%d)", x,y));
     		MkGraphics.putPixel(g, x, y);
     	}    	
 	}
+    
+    private static void drawLineCase3(Graphics g, int x1, int y1, int y2, int dx, int dy) {
+    	int d = -(2*dx + dy); // start
+    	
+    	int n = -2*dx;
+    	int nw = -2*(dx + dy);
+    	
+    	int x = x1;
+    	int y = y1;
+    	System.out.println(String.format("(%d,%d)", x,y));
+    	MkGraphics.putPixel(g, x, y);
+    	
+    	while(y < y2) {
+    		if(d >= 0) {
+    			d = d + nw;
+    			x = x - 1;
+    			y = y + 1;
+    		} else {
+    			d = d + n;
+    			y = y + 1;
+    		}
+    		System.out.println(String.format("(%d,%d)", x,y));
+    		MkGraphics.putPixel(g, x, y);
+    	}
+    }
 
 	/**
      * Draws the outline of the specified rectangle. The left and right edges of
