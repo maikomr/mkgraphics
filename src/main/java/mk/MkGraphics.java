@@ -46,17 +46,17 @@ public class MkGraphics {
         	}
         } else if(dx < 0) {
         	if(dy > 0) {
-        		if(dx < dy) {
+        		if(-1*dx < dy) {
         			drawLineCase3(g, x1, y1, y2, dx, dy);
         		} else {
-        			// TODO draw line case 4
+        			drawLineCase4(g, x1, y1, x2, dx, dy);
         		}
         	}
         }
     }
 
 	private static void drawLineCase1(Graphics g, int x1, int y1, int x2, int dx, int dy) {
-		int d = 2*dy - dx; // d start
+		int d = 2*dy - dx; // start
 		
 		int e = 2*dy;
 		int ne = 2*(dy - dx);
@@ -129,6 +129,31 @@ public class MkGraphics {
     		MkGraphics.putPixel(g, x, y);
     	}
     }
+    
+    private static void drawLineCase4(Graphics g, int x1, int y1, int x2, int dx, int dy) {
+		int d = -(dx + 2*dy); // start
+		
+		int w = -2*dy;
+		int nw = -2*(dx + dy);
+		
+		int x = x1;
+    	int y = y1;
+    	System.out.println(String.format("(%d,%d)", x,y));
+    	MkGraphics.putPixel(g, x, y);
+    	
+    	while(x > x2) {
+    		if(d <= 0) { // northwest
+    			d = d + nw;
+    			x = x - 1;
+    			y = y + 1;
+    		} else { // west
+    			d = d + w;
+    			x = x - 1;
+    		}
+    		System.out.println(String.format("(%d,%d)", x,y));
+    		MkGraphics.putPixel(g, x, y);
+    	}
+	}
 
 	/**
      * Draws the outline of the specified rectangle. The left and right edges of
