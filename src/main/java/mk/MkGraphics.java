@@ -294,7 +294,12 @@ public class MkGraphics {
      * @param height the height of the rectangle.
      */
     public static void drawRect(Graphics g, int x, int y, int width, int height) {
-        // TODO implmement bresenham for a rectangle
+    	int x2 = x + width;
+    	int y2 = y + height; 
+    	MkGraphics.drawLine(g, x, y, x2, y);
+    	MkGraphics.drawLine(g, x, y, x, y2);
+    	MkGraphics.drawLine(g, x, y2, x2, y2);
+    	MkGraphics.drawLine(g, x2, y, x2, y2);
     }
 
     /**
