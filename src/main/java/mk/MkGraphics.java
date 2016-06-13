@@ -42,12 +42,12 @@ public class MkGraphics {
         	int x = x1;
     		int y = y1;
         	if (dy > 0) {
-        		while(y < y2) {
+        		while(y <= y2) {
         			MkGraphics.putPixel(g, x, y);
         			y = y + 1;
         		}
         	} else {
-        		while(y > y2) {
+        		while(y >= y2) {
         			MkGraphics.putPixel(g, x, y);
         			y = y - 1;
         		}
@@ -56,12 +56,12 @@ public class MkGraphics {
         	int x = x1;
     		int y = y1;
         	if (dx > 0) {
-        		while(x < x2) {
+        		while(x <= x2) {
         			MkGraphics.putPixel(g, x, y);
         			x = x + 1;
         		}
         	} else {
-        		while(x > x2) {
+        		while(x >= x2) {
         			MkGraphics.putPixel(g, x, y);
         			x = x - 1;
         		}
