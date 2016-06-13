@@ -36,14 +36,44 @@ public class MkGraphics {
         int dx = x2 - x1;
         int dy = y2 - y1;
         
-        if(dx > 0) {
+        if(dx == 0 && dy == 0) {
+        	MkGraphics.putPixel(g, x1, y1); // a point
+        } else if(dx == 0) { // a vertical line
+        	int x = x1;
+    		int y = y1;
+        	if (dy > 0) {
+        		while(y < y2) {
+        			MkGraphics.putPixel(g, x, y);
+        			y = y + 1;
+        		}
+        	} else {
+        		while(y > y2) {
+        			MkGraphics.putPixel(g, x, y);
+        			y = y - 1;
+        		}
+        	}
+        } else if(dy == 0) { // an horizontal line
+        	int x = x1;
+    		int y = y1;
+        	if (dx > 0) {
+        		while(x < x2) {
+        			MkGraphics.putPixel(g, x, y);
+        			x = x + 1;
+        		}
+        	} else {
+        		while(x > x2) {
+        			MkGraphics.putPixel(g, x, y);
+        			x = x - 1;
+        		}
+        	}
+        } else if(dx > 0) {
         	if(dy > 0) {
 		        if(dx > dy) {
 		        	drawLineCase1(g, x1, y1, x2, dx, dy);
 		        } else {	        
 			        drawLineCase2(g, x1, y1, y2, dx, dy);
 		        }
-        	} else {
+        	} else if (dy < 0){
         		if(-1*dy > dx) {
         			drawLineCase7(g, x1, y1, y2, dx, dy);
         		} else {
@@ -227,7 +257,6 @@ public class MkGraphics {
     		}
         	MkGraphics.putPixel(g, x, y);
     	}
-		
 	}
     
     private static void drawLineCase8(Graphics g, int x1, int y1, int x2, int dx, int dy) {
@@ -238,7 +267,6 @@ public class MkGraphics {
 		
 		int x = x1;
 		int y = y1;
-		System.out.println(String.format("(%d,%d)", x,y));
     	MkGraphics.putPixel(g, x, y);
 		
 		while(x < x2) {
@@ -250,7 +278,6 @@ public class MkGraphics {
 				d = d + e;
 				x = x + 1;
 			}
-			System.out.println(String.format("(%d,%d)", x,y));
 	    	MkGraphics.putPixel(g, x, y);
 		}
 	}
