@@ -43,6 +43,12 @@ public class MkGraphics {
 		        } else {	        
 			        drawLineCase2(g, x1, y1, y2, dx, dy);
 		        }
+        	} else {
+        		if(-1*dy > dx) {
+        			drawLineCase7(g, x1, y1, y2, dx, dy);
+        		} else {
+        			drawLineCase8(g, x1, y1, x2, dx, dy);
+        		}
         	}
         } else if(dx < 0) {
         	if(dy > 0) {
@@ -50,6 +56,12 @@ public class MkGraphics {
         			drawLineCase3(g, x1, y1, y2, dx, dy);
         		} else {
         			drawLineCase4(g, x1, y1, x2, dx, dy);
+        		}
+        	} else {
+        		if(-1*dx > -1*dy) {
+        			drawLineCase5(g, x1, y1, x2, dx, dy);
+        		} else {
+        			drawLineCase6(g, x1, y1, y2, dx, dy);
         		}
         	}
         }
@@ -63,7 +75,6 @@ public class MkGraphics {
 		
 		int x = x1;
 		int y = y1;        
-		System.out.println(String.format("(%d,%d)", x,y));
 		MkGraphics.putPixel(g, x, y);
 		
 		while (x < x2) {
@@ -75,7 +86,6 @@ public class MkGraphics {
 				x = x + 1;
 				y = y + 1;
 			}
-			System.out.println(String.format("(%d,%d)", x,y));
 			MkGraphics.putPixel(g, x, y);
 		}
 	}
@@ -88,7 +98,6 @@ public class MkGraphics {
     	
     	int x = x1;
     	int y = y1;
-    	System.out.println(String.format("(%d,%d)", x,y));
     	MkGraphics.putPixel(g, x, y);
     	
     	while(y < y2) {
@@ -100,7 +109,6 @@ public class MkGraphics {
     			d = d + n;
     			y = y + 1;
     		}
-    		System.out.println(String.format("(%d,%d)", x,y));
     		MkGraphics.putPixel(g, x, y);
     	}    	
 	}
@@ -113,7 +121,6 @@ public class MkGraphics {
     	
     	int x = x1;
     	int y = y1;
-    	System.out.println(String.format("(%d,%d)", x,y));
     	MkGraphics.putPixel(g, x, y);
     	
     	while(y < y2) {
@@ -125,7 +132,6 @@ public class MkGraphics {
     			d = d + n;
     			y = y + 1;
     		}
-    		System.out.println(String.format("(%d,%d)", x,y));
     		MkGraphics.putPixel(g, x, y);
     	}
     }
@@ -138,7 +144,6 @@ public class MkGraphics {
 		
 		int x = x1;
     	int y = y1;
-    	System.out.println(String.format("(%d,%d)", x,y));
     	MkGraphics.putPixel(g, x, y);
     	
     	while(x > x2) {
@@ -150,9 +155,104 @@ public class MkGraphics {
     			d = d + w;
     			x = x - 1;
     		}
-    		System.out.println(String.format("(%d,%d)", x,y));
     		MkGraphics.putPixel(g, x, y);
     	}
+	}
+    
+    private static void drawLineCase5(Graphics g, int x1, int y1, int x2, int dx, int dy) {
+		int d = -2*dy + dx; // start
+		
+		int w = -2*dy;
+		int sw = -2*(dy - dx);
+		
+		int x = x1;
+		int y = y1;
+    	MkGraphics.putPixel(g, x, y);
+    	
+    	while(x > x2) {
+    		if(d >= 0) { // southwest
+    			d = d + sw;
+    			x = x - 1;
+    			y = y - 1;
+    		} else { // west
+    			d = d + w;
+    			x = x - 1;
+    		}
+        	MkGraphics.putPixel(g, x, y);
+    	}
+	}
+    
+    private static void drawLineCase6(Graphics g, int x1, int y1, int y2, int dx, int dy) {
+		int d = 2*dx - dy; // start
+		
+		int s = 2*dx;
+		int sw = 2*(dx - dy);
+		
+		int x = x1;
+		int y = y1;
+    	MkGraphics.putPixel(g, x, y);
+    	
+    	while( y > y2) {
+    		if(d <= 0) { // south west
+    			d = d + sw;
+    			y = y - 1;
+    			x = x - 1;
+    		} else { // south
+    			d = d + s;
+    			y = y - 1;
+    		}
+        	MkGraphics.putPixel(g, x, y);
+    	}
+		
+	}
+    
+    private static void drawLineCase7(Graphics g, int x1, int y1, int y2, int dx, int dy) {
+		int d = 2*dx + dy; // start
+		
+		int s = 2*dx;
+		int se = 2*(dy + dx);
+		
+		int x = x1;
+		int y = y1;
+    	MkGraphics.putPixel(g, x, y);
+    	
+    	while(y > y2) {
+    		if(d >= 0) { // south east
+    			d = d + se;
+    			x = x + 1;
+    			y = y - 1;
+    		} else { // south
+    			d = d + s;
+    			y = y - 1;
+    		}
+        	MkGraphics.putPixel(g, x, y);
+    	}
+		
+	}
+    
+    private static void drawLineCase8(Graphics g, int x1, int y1, int x2, int dx, int dy) {
+		int d = 2*dy + dx; // start
+		
+		int e = 2*dy;
+		int se = 2*(dy + dx);
+		
+		int x = x1;
+		int y = y1;
+		System.out.println(String.format("(%d,%d)", x,y));
+    	MkGraphics.putPixel(g, x, y);
+		
+		while(x < x2) {
+			if(d <= 0) { // south east
+				d = d + se;
+				x = x + 1;
+				y = y - 1;
+			} else { // east
+				d = d + e;
+				x = x + 1;
+			}
+			System.out.println(String.format("(%d,%d)", x,y));
+	    	MkGraphics.putPixel(g, x, y);
+		}
 	}
 
 	/**
