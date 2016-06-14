@@ -283,23 +283,19 @@ public class MkGraphics {
 	}
 
 	/**
-     * Draws the outline of the specified rectangle. The left and right edges of
-     * the rectangle are at x and x + width. The top and bottom edges are at y
-     * and y + height.
+     * Draws the outline of the specified rectangle.
      *
      * @param g the graphic context in which the pixel will be drawn.
-     * @param x x coordinate.
-     * @param y y coordinate.
-     * @param width the width of the rectangle.
-     * @param height the height of the rectangle.
+     * @param x1 x1 start point coordinate.
+     * @param y1 y1 start point coordinate.
+     * @param x2 y2 end point coordinate.
+     * @param y2 x2 end point coordinate.
      */
-    public static void drawRect(Graphics g, int x, int y, int width, int height) {
-    	int x2 = x + width;
-    	int y2 = y + height; 
-    	MkGraphics.drawLine(g, x, y, x2, y);
-    	MkGraphics.drawLine(g, x, y, x, y2);
-    	MkGraphics.drawLine(g, x, y2, x2, y2);
-    	MkGraphics.drawLine(g, x2, y, x2, y2);
+    public static void drawRect(Graphics g, int x1, int y1, int x2, int y2) {
+    	MkGraphics.drawLine(g, x1, y1, x2, y1);
+    	MkGraphics.drawLine(g, x1, y1, x1, y2);
+    	MkGraphics.drawLine(g, x1, y2, x2, y2);
+    	MkGraphics.drawLine(g, x2, y1, x2, y2);
     }
 
     /**
