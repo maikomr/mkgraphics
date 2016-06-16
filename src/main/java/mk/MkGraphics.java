@@ -354,52 +354,24 @@ public class MkGraphics {
      * @param width the width of the ellipse.
      * @param height the height of the ellipse.
      */
-    public static void drawEllipse(Graphics g, int x0, int y0, int x1, int y1) {
-        // diameter
-    	int a = Math.abs(x1-x0);
-        int b = Math.abs(y1-y0);
-        int b1 = b&1;
-        
-        // error increment
-        long dx = 4*(1-a)*b*b;
-        long dy = 4*(b1+1)*a*a;
-        
-        // error of first half
-        long err = dx+dy+b1*a*a;
-        long e2;
-        
-        if(x0>x1) { x0 = x1; x1 = x1 + a;} // if called with swapped points
-        if(y0>y1) y0 = y1; // exchange them
-        
-        // starting pixel
-        y0 = y0 + (b+1)/2;
-        y1 = y0-b1;
-        
-        a = a*8*a;
-        b1 = 8*b*b;
-        
-        do {
-        	MkGraphics.putPixel(g, x1, y0); //   I. Quadrant
-        	MkGraphics.putPixel(g, x0, y0); //  II. Quadrant
-        	MkGraphics.putPixel(g, x0, y1); // III. Quadrant
-        	MkGraphics.putPixel(g, x1, y1); //  IV. Quadrant
-        	e2 = 2*err;
-        	if(e2 <= dy) { y0++; y1--; err += dy += a; } // y step
-        	if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
-        } while(x0 <= x1);
-        
-        while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-        	MkGraphics.putPixel(g, x0-1, y0); /* -> finish tip of ellipse */
-        	MkGraphics.putPixel(g, x1+1, y0++); 
-        	MkGraphics.putPixel(g, x0-1, y1);
-        	MkGraphics.putPixel(g, x1+1, y1--); 
-        }
+    public static void drawEllipse(Graphics g, int xm, int ym, int a, int b) {
+    	int x = -a, y = 0; /* II. quadrant from bottom left to top right */
+    	long e2 = b, dx = (1+2*x)*e2*e2; /* error increment */
+    	long dy = x*x, err = dx+dy; /* error of 1.step */
+    	
+    	do {
+    		MkGraphics.putPixel(g, xm-x, ym+y); /* I. Quadrant */
+    		MkGraphics.putPixel(g, xm+x, ym+y); /* II. Quadrant */
+    		MkGraphics.putPixel(g, xm+x, ym-y); /* III. Quadrant */
+    		MkGraphics.putPixel(g, xm-x, ym-y); /* IV. Quadrant */
+	    	e2 = 2*err;
+	    	if (e2 >= dx) { x++; err += dx += 2*(long)b*b; } /* x step */
+	    	if (e2 <= dy) { y++; err += dy += 2*(long)a*a; } /* y step */
+    	} while (x <= 0);
+    	
+    	while (y++ < b) { /* to early stop for flat ellipses with a=1, */
+    		MkGraphics.putPixel(g, xm, ym+y); /* -> finish tip of ellipse */
+    		MkGraphics.putPixel(g, xm, ym-y);
+    	}
     }
-
-	private static void drawEllypse(Graphics g, int cx, int cy, int x, int y) {
-		MkGraphics.putPixel(g, cx + x, cy + y);
-		MkGraphics.putPixel(g, cx - x, cy + y);
-		MkGraphics.putPixel(g, cx + x, cy - y);
-		MkGraphics.putPixel(g, cx - x, cy - y);
-	}
 }
