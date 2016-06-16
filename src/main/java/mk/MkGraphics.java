@@ -302,15 +302,49 @@ public class MkGraphics {
      * Draws a circle, with center in the x and y coordinates.
      *
      * @param g the graphic context in which the pixel will be drawn.
-     * @param x the center x coordinate.
-     * @param y the center y coordinate.
+     * @param cx the center x coordinate.
+     * @param cy the center y coordinate.
      * @param radius the radius of the circle.
      */
-    public static void drawCircle(Graphics g, int x, int y, int radius) {
-        // TODO implmement bresenham for a circle 
+    public static void drawCircle(Graphics g, int cx, int cy, int radius) {
+    	int x = 0;
+    	int y = radius;
+    	int d = 1 - radius;
+    	int e = 3;
+    	int se = -2*radius + 5;
+    	System.out.println(String.format("(%d,%d)",x,y));
+    	drawCircle(g, cx, cy, x, y);
+    	
+    	while(y > x) {
+    		if(d < 0) { // east
+    			d = d + e;
+    			e = e + 2;
+    			se = se + 2;
+    			x = x + 1;
+    		} else { // south east
+    			d = d + se;
+    			e = e + 2;
+    			se = se + 4;
+    			x = x + 1;
+    			y = y - 1;
+    		}
+    		System.out.println(String.format("(%d,%d)",x,y));
+    		drawCircle(g, cx, cy, x, y);
+    	}
     }
 
-    /**
+    private static void drawCircle(Graphics g, int cx, int cy, int x, int y) {
+		MkGraphics.putPixel(g, cx+x, cy+y);
+		MkGraphics.putPixel(g, cx+y, cy+x);
+		MkGraphics.putPixel(g, cx+x, cy-y);
+		MkGraphics.putPixel(g, cx-y, cy+x);
+		MkGraphics.putPixel(g, cx-x, cy-y);
+		MkGraphics.putPixel(g, cx-y, cy-x);
+		MkGraphics.putPixel(g, cx-x, cy+y);
+		MkGraphics.putPixel(g, cx+y, cy-x);
+	}
+
+	/**
      * Draws an ellipse, that fits within the rectangle specified by the x, y,
      * width, and height arguments.
      *
