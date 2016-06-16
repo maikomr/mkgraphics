@@ -1,4 +1,4 @@
-package main.java.mk;
+package mk;
 
 import java.awt.Graphics;
 
@@ -312,7 +312,6 @@ public class MkGraphics {
     	int d = 1 - radius;
     	int e = 3;
     	int se = -2*radius + 5;
-    	System.out.println(String.format("(%d,%d)",x,y));
     	drawCircle(g, cx, cy, x, y);
     	
     	while(y > x) {
@@ -328,7 +327,6 @@ public class MkGraphics {
     			x = x + 1;
     			y = y - 1;
     		}
-    		System.out.println(String.format("(%d,%d)",x,y));
     		drawCircle(g, cx, cy, x, y);
     	}
     }
