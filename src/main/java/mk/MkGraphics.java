@@ -354,41 +354,45 @@ public class MkGraphics {
      * @param width the width of the ellipse.
      * @param height the height of the ellipse.
      */
-    public static void drawEllipse(Graphics g, int cx, int cy, int width, int height) {
-        int sqX = width * width;
-        int sqY = height * height;
-        int x = 0, y = height;
-        int dx = 0, dy = 2*sqX*y;
+    public static void drawEllipse(Graphics g, int x0, int y0, int x1, int y1) {
+        // diameter
+    	int a = Math.abs(x1-x0);
+        int b = Math.abs(y1-y0);
+        int b1 = b&1;
         
-        drawEllypse(g,cx,cy,x,y);
+        // error increment
+        long dx = 4*(1-a)*b*b;
+        long dy = 4*(b1+1)*a*a;
         
-        int d =  sqY - (sqX*height) + (int)(0.25 * sqX); // first half
+        // error of first half
+        long err = dx+dy+b1*a*a;
+        long e2;
         
-        while (dx < dy) {
-        	x = x + 1;
-        	dx = dx + 2*sqY;
-        	if(d < 0) {
-        		d = d + sqY + dx;
-        	} else {
-        		y = y - 1;
-        		dy = dy - 2*sqX;
-        		d = d + sqY + dx - dy;
-        	}
-        	drawEllypse(g, cx, cy, x, y);
-        }
+        if(x0>x1) { x0 = x1; x1 = x1 + a;} // if called with swapped points
+        if(y0>y1) y0 = y1; // exchange them
         
-        d = sqY*(int)(Math.pow(x+0.5, 2)) + sqX*(int)(Math.pow(y-1, 2)) - sqX*sqY; // second half
+        // starting pixel
+        y0 = y0 + (b+1)/2;
+        y1 = y0-b1;
         
-        while(y > 0) {
-        	y = y - 1;
-        	dy = dy - 2*sqX;
-        	if(d > 0) {
-        		d = d + sqX - dy;
-        	} else {
-        		x = x + 1;
-        		d = d + sqX - dy + dx;
-        	}
-        	drawEllypse(g, cx, cy, x, y);
+        a = a*8*a;
+        b1 = 8*b*b;
+        
+        do {
+        	MkGraphics.putPixel(g, x1, y0); //   I. Quadrant
+        	MkGraphics.putPixel(g, x0, y0); //  II. Quadrant
+        	MkGraphics.putPixel(g, x0, y1); // III. Quadrant
+        	MkGraphics.putPixel(g, x1, y1); //  IV. Quadrant
+        	e2 = 2*err;
+        	if(e2 <= dy) { y0++; y1--; err += dy += a; } // y step
+        	if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
+        } while(x0 <= x1);
+        
+        while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
+        	MkGraphics.putPixel(g, x0-1, y0); /* -> finish tip of ellipse */
+        	MkGraphics.putPixel(g, x1+1, y0++); 
+        	MkGraphics.putPixel(g, x0-1, y1);
+        	MkGraphics.putPixel(g, x1+1, y1--); 
         }
     }
 
