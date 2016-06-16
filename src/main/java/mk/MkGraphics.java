@@ -334,14 +334,14 @@ public class MkGraphics {
     }
 
     private static void drawCircle(Graphics g, int cx, int cy, int x, int y) {
-		MkGraphics.putPixel(g, cx+x, cy+y);
-		MkGraphics.putPixel(g, cx+y, cy+x);
-		MkGraphics.putPixel(g, cx+x, cy-y);
-		MkGraphics.putPixel(g, cx-y, cy+x);
-		MkGraphics.putPixel(g, cx-x, cy-y);
-		MkGraphics.putPixel(g, cx-y, cy-x);
-		MkGraphics.putPixel(g, cx-x, cy+y);
-		MkGraphics.putPixel(g, cx+y, cy-x);
+		MkGraphics.putPixel(g, cx + x, cy + y);
+		MkGraphics.putPixel(g, cx + y, cy + x);
+		MkGraphics.putPixel(g, cx + x, cy - y);
+		MkGraphics.putPixel(g, cx - y, cy + x);
+		MkGraphics.putPixel(g, cx - x, cy - y);
+		MkGraphics.putPixel(g, cx - y, cy - x);
+		MkGraphics.putPixel(g, cx - x, cy + y);
+		MkGraphics.putPixel(g, cx + y, cy - x);
 	}
 
 	/**
@@ -349,12 +349,53 @@ public class MkGraphics {
      * width, and height arguments.
      *
      * @param g the graphic context in which the pixel will be drawn.
-     * @param x the center x coordinate.
-     * @param y the center y coordinate.
+     * @param cx the center x coordinate.
+     * @param cy the center y coordinate.
      * @param width the width of the ellipse.
      * @param height the height of the ellipse.
      */
-    public static void drawEllipse(Graphics g, int x, int y, int width, int height) {
-        // TODO implmement bresenham for an oval
+    public static void drawEllipse(Graphics g, int cx, int cy, int width, int height) {
+        int sqX = width * width;
+        int sqY = height * height;
+        int x = 0, y = height;
+        int dx = 0, dy = 2*sqX*y;
+        
+        drawEllypse(g,cx,cy,x,y);
+        
+        int d =  sqY - (sqX*height) + (int)(0.25 * sqX); // first half
+        
+        while (dx < dy) {
+        	x = x + 1;
+        	dx = dx + 2*sqY;
+        	if(d < 0) {
+        		d = d + sqY + dx;
+        	} else {
+        		y = y - 1;
+        		dy = dy - 2*sqX;
+        		d = d + sqY + dx - dy;
+        	}
+        	drawEllypse(g, cx, cy, x, y);
+        }
+        
+        d = sqY*(int)(Math.pow(x+0.5, 2)) + sqX*(int)(Math.pow(y-1, 2)) - sqX*sqY; // second half
+        
+        while(y > 0) {
+        	y = y - 1;
+        	dy = dy - 2*sqX;
+        	if(d > 0) {
+        		d = d + sqX - dy;
+        	} else {
+        		x = x + 1;
+        		d = d + sqX - dy + dx;
+        	}
+        	drawEllypse(g, cx, cy, x, y);
+        }
     }
+
+	private static void drawEllypse(Graphics g, int cx, int cy, int x, int y) {
+		MkGraphics.putPixel(g, cx + x, cy + y);
+		MkGraphics.putPixel(g, cx - x, cy + y);
+		MkGraphics.putPixel(g, cx + x, cy - y);
+		MkGraphics.putPixel(g, cx - x, cy - y);
+	}
 }
